@@ -1,0 +1,207 @@
+<table class="jiraform  maxWidth">
+    <tbody>
+    <tr>
+        <td class="jiraformheader">
+            <a target="_jirahelp" href="http://docs.atlassian.com/jira/docs-042/Managing+Groups?clicked=jirahelp"
+               class="help-lnk">
+                <img height="16" border="0" align="right" width="16" title="Get online help about Managing Groups"
+                     alt="Get help!" src="${baseurl}/s/587/1/_/images/icons/ico_help.png"></a>
+
+            <h3 class="formtitle">$i18n.getText('groupbrowser.title')</h3></td>
+    </tr>
+    <tr>
+        <td class="jiraformbody">
+            <p>
+                $i18n.getText('groupbrowser.desc')</p>
+
+            <p>$i18n.getText('groupbrowser.desc1')</p>
+            #if(!${externalUserManagementEnabled})
+                <ul class="square">
+                    <li><b><a href="${baseurl}/secure/admin/user/BulkEditUserGroups!default.jspa"
+                              id="bulk_edit_groups">$i18n.getText('groupbrowser.bulkedit')</a></b>
+                    </li>
+                </ul>
+            #end
+        </td>
+    </tr>
+    </tbody>
+</table>
+<p>
+
+</p>
+<table cellspacing="0" cellpadding="0" border="0" width="100%">
+    <tbody>
+    <tr>
+        <td valign="top">
+            <p>
+                $i18n.getText('groupbrowser.displayGroups', ${niceStart}, ${niceEnd},${browsableItems.size()})
+            </p>
+            <table border="0" width="100%" class="grid" id="group_browser_table">
+                <tbody>
+                <tr bgcolor="#f0f0f0">
+                    <th width="40%">
+                        $i18n.getText('groupbrowser.group')
+                    </th>
+                    <th width="20%">
+                        $i18n.getText('groupbrowser.users')
+                    </th>
+                    <th width="30%">
+                        $i18n.getText('groupbrowser.permschemes')
+                    </th>
+                    #if(!${externalUserManagementEnabled})
+                        <th nowrap="" width="10%">
+                            $i18n.getText('groupbrowser.operations')
+                        </th>
+                    #end
+                </tr>
+                    #foreach ($option in ${currentPage})
+                        #if ($option)
+                        <tr #if (($velocityCount % 2)==0) bgcolor="#fffff0" #else bgcolor="#ffffff" #end>
+                            <td valign="top"><a
+                                    href="${baseurl}/secure/admin/user/ViewGroup.jspa?name=$option.name&atl_token=${atl_token}">$option.name</a>
+                            </td>
+                            <td valign="top">$option.users.size()
+                                <font size="1">(<a
+                                        href="${baseurl}/secure/admin/user/UserBrowser.jspa?group=$option.name&atl_token=${atl_token}&emailFilter=">$i18n.getText('groupbrowser.view')</a>)</font>
+                            </td>
+                            <td>
+                                #foreach ($permissionScheme in $action.getPermissionSchemes($option.name))
+                                    <img height="8" border="0" align="absmiddle" width="8"
+                                         src="${baseurl}/images/icons/bullet_blue.gif">
+                                    <a href="${baseurl}/secure/admin/EditPermissions!default.jspa?schemeId=${permissionScheme.id}">$permissionScheme.name</a><br>
+                                #end
+                            </td>
+                            #if(!${externalUserManagementEnabled} && ${action.isUserAbleToDeleteGroup($option.name)})
+                                <td nowrap="" valign="top">
+                                    <a href="${baseurl}/secure/admin/user/DeleteGroup!default.jspa?name=${option.name}&atl_token=${atl_token}"
+                                       id="del_$option.name">$i18n.getText('groupbrowser.delete')</a> |
+                                    <a href="${baseurl}/secure/admin/user/BulkEditUserGroups!default.jspa?selectedGroupsStr=${option.name}&atl_token=${atl_token}"
+                                       id="edit_members_of_$option.name">$i18n.getText('groupbrowser.editmembers')</a>
+                                </td>
+                            #end
+                        </tr>
+                        #end
+                    #end
+                </tbody>
+            </table>
+            <p align="center">
+                #if ($filter.start > 0)
+                    <a href="${baseurl}/secure/admin/user/GroupBrowser.jspa?start=${filter.previousStart}&atl_token=${atl_token}">
+                        &lt;&lt; $i18n.getText('groupbrowser.prev')</a>
+                #end
+                #if ($filter.end < $browsableItems.size())
+                    <a href="${baseurl}/secure/admin/user/GroupBrowser.jspa?start=${filter.nextStart}&atl_token=${atl_token}">$i18n.getText('groupbrowser.next')
+                        &gt;&gt;</a>
+                #end
+            </p>
+        </td>
+
+        <td>&nbsp;&nbsp;&nbsp;</td>
+
+        <td bgcolor="#ffffff" width="250" valign="top">
+            #if(!${externalUserManagementEnabled})
+                <form method="post" action="${baseurl}/secure/admin/user/GroupBrowser!add.jspa">
+                    <input type="hidden" value="$atl_token" name="atl_token" id="atl_token">
+                    <table border="0" bgcolor="#666666" width="100%" id="add_group" class="grid">
+                        <tbody>
+                        <tr>
+                            <td bgcolor="#f0f0f0">
+                                <h3 class="formtitle">$i18n.getText('groupbrowser.addgroup')</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fieldLabelAreaTop" colspan="2">
+                                $i18n.getText('groupbrowser.name'):
+                            </td>
+                        </tr>
+                        <tr style="" class="">
+                            <td bgcolor="#ffffff" class="fieldValueArea">
+                                <input type="text" size="20" name="addName" id="addName">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="fieldLabelAreaTop" colspan="2">
+                                <label for="company">$i18n.getText('groupbrowser.company'):&nbsp;&nbsp;<input type="checkbox" name="company" id="company"
+                                                                       value="company">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td bgcolor="#f0f0f0" align="center">
+                                <input type="submit" value="$i18n.getText('groupbrowser.addgroup')" name="add_group">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </form>
+            #end
+            <form method="post" action="${baseurl}/secure/admin/user/GroupBrowser.jspa">
+                <table border="0" bgcolor="#666666" width="100%" class="grid">
+                    <tbody>
+                    <tr>
+                        <td bgcolor="#f0f0f0">
+                            <h3 class="formtitle">$i18n.getText('groupbrowser.groupfilter')</h3>
+
+                            <font size="1">
+                                (<a href="GroupBrowser.jspa?nameFilter=">$i18n.getText('groupbrowser.clearfilter')</a>)
+                            </font>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fieldLabelAreaTop" colspan="2">
+                            $i18n.getText('groupbrowser.perpage'):
+                        </td>
+                    </tr>
+                    <tr style="" class="">
+                        <td bgcolor="#ffffff" class="fieldValueArea">
+                            <fieldset class="hidden parameters">
+                                <input type="hidden" value="" title="summaries" class="list">
+                                <input type="hidden" value="" title="summaries" class="list">
+                                <input type="hidden" value="" title="summaries" class="list">
+                                <input type="hidden" value="" title="summaries" class="list">
+                                <input type="hidden" value="max" title="paramName">
+                            </fieldset>
+                            <select id="max_select" name="max">
+                                <option value="10">
+                                    10
+                                </option>
+                                <option selected="" value="20">
+                                    20
+                                </option>
+                                <option value="50">
+                                    50
+                                </option>
+                                <option value="100">
+                                    100
+                                </option>
+                            </select>
+                            <span id="max_summary" class="selectDescription"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fieldLabelAreaTop" colspan="2">
+                            $i18n.getText('groupbrowser.namecontains'):
+                        </td>
+                    </tr>
+                    <tr style="" class="">
+                        <td bgcolor="#ffffff" class="fieldValueArea">
+                            <input type="text" size="20" name="nameFilter">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td bgcolor="#f0f0f0" align="center">
+                            <input type="hidden" name="atl_token" value="${atl_token}">
+                            <input type="submit" value="$i18n.getText('groupbrowser.filter')">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<script type="text/javascript">
+    jQuery(function ($) {
+        document.title = "$i18n.getText('groupbrowser.title') -"  + " ATG-JIRA";
+    });
+</script>

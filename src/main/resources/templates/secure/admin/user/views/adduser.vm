@@ -1,0 +1,112 @@
+<form method="post" onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform"
+      id="addform" action="${baseurl}/secure/admin/user/AddUser.jspa">
+    <input type="hidden" value="$atl_token" name="atl_token" id="atl_token">
+    <table class="jiraform maxWidth">
+        <tbody>
+        <tr class="titlerow">
+            <td class="jiraformheader" colspan="2">
+
+                <h3 class="formtitle">$i18n.getText("adduser.title")</h3></td>
+        </tr>
+        <tr class="descriptionrow">
+            <td class="jiraformheader" colspan="2">
+                <div class="desc-wrap">
+                ##                    <p><ww:text name="'admin.adduser.enter.details.below'"/></p>
+                ##                    <p><ww:text name="'admin.adduser.if.you.do.not.enter.a.password'"/></p>
+##                    <p><ww:text name="'admin.adduser.user.will.be.notified.via.email'"/></p>
+                     <p>$i18n.getText("adduser.desc1")</p>
+                    <p>$i18n.getText("adduser.desc2")</p>
+                    <p>$i18n.getText("adduser.desc3")</p>
+                </div>
+                <div class="notify info">
+                     <p>$i18n.getText("adduser.desc1")</p>
+                    <p>$i18n.getText("adduser.desc2")</p>
+                    <p>$i18n.getText("adduser.desc3")</p>
+                </div>
+            </td>
+        </tr>
+            #parse('templates/error/adduser-error.vm')
+        <tr>
+            <td class="fieldLabelArea">
+                            $i18n.getText("userform.login"):
+            </td>
+            <td bgcolor="#ffffff" class="fieldValueArea">
+                <input type="text" maxlength="255" size="40" name="username">
+            </td>
+        </tr>
+        <tr>
+            <td class="fieldLabelArea">
+                            $i18n.getText("userform.pass"):
+            </td>
+            <td bgcolor="#ffffff" class="fieldValueArea">
+                <input type="password" autocomplete="off" size="40" name="password">
+            </td>
+        </tr>
+        <tr>
+            <td class="fieldLabelArea">
+                            $i18n.getText("userform.confirm"):
+            </td>
+            <td bgcolor="#ffffff" class="fieldValueArea">
+                <input type="password" autocomplete="off" size="40" name="confirm">
+            </td>
+        </tr>
+        <tr>
+            <td class="fieldLabelArea">
+                            $i18n.getText("userform.fullname"):
+            </td>
+            <td bgcolor="#ffffff" class="fieldValueArea">
+                <input type="text" maxlength="255" size="40" name="fullname">
+            </td>
+        </tr>
+        <tr>
+            <td class="fieldLabelArea">
+                $i18n.getText("userform.email")::
+            </td>
+            <td bgcolor="#ffffff" class="fieldValueArea">
+                <input type="text" maxlength="255" size="40" name="email">
+            </td>
+        </tr>
+        <tr>
+            <td class="fieldLabelArea">
+                            <input type="checkbox" id="checkbox_company" value="true" name="checkbox_company"><label
+                    for="checkbox_company">$i18n.getText("userform.addcompany"):</label>
+            </td>
+            <td bgcolor="#ffffff" class="fieldValueArea">
+                            <select name="companyName" id="companyName" disabled="disabled">
+                #foreach ($company in ${companies})
+                    <option value="$company.name">$company.name</option>
+                #end
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="fieldLabelArea">
+$i18n.getText("userform.sendpassemail"):
+                            </td>
+            <td bgcolor="#ffffff" class="fieldValueArea">
+                <input type="checkbox" value="true" name="sendEmail" checked="checked">
+                <br><font size="1">
+                $i18n.getText("userform.sendpassemail.desc"):
+            </font>
+            </td>
+        </tr>
+        <tr>
+            <td class="jiraformfooter">&nbsp;</td>
+            <td colspan="1">
+                <input type="submit" class="spaced " title="Press Alt+Shift+s to submit form" accesskey="s"
+                       id="create_submit" value="$i18n.getText('userform.create')" name="Create">
+                <input type="button" onclick="location.href='UserBrowser.jspa'" value="$i18n.getText('userform.cancel')" name="UserBrowser.jspa"
+                       title="Cancel (Alt+Shift + `)" accesskey="`" id="cancelButton">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<script type="text/javascript">
+    jQuery(function ($) {
+        document.title = "$i18n.getText('adduser.title') - " + " ATG-JIRA";
+        $('#checkbox_company').click(function() {
+            $('#companyName').attr('disabled', ! this.checked)
+        });
+    });
+</script>

@@ -1,0 +1,42 @@
+<atlassian-plugin key="${project.groupId}.${project.artifactId}" name="${project.artifactId}">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}"/>
+    </plugin-info>
+
+
+    <web-resource key="organizations-resources" name="Organizations resources">
+        <dependency>jira.webresources:jira-global</dependency>
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        <dependency>com.atlassian.auiplugin:jquery</dependency>
+        <resource type="download" name="jquery.autocomplete.js" location="js/atlassian/jquery/jquery.autocomplete.js"/>
+    </web-resource>
+    <resource type="i18n" name="i18n" location="dementiev.TextResource"/>
+
+    <webwork1 key="DementievPluginActions" name="Dementiev Plugin Actions" class="java.lang.Object">
+        <actions>
+            <action name="latest.MyAddUser"
+                    alias="AddUser" roles-required="admin">
+                <view name="error">/templates/secure/admin/user/views/adduser.vm</view>
+                <view name="input">/templates/secure/admin/user/views/adduser.vm</view>
+            </action>
+
+         <action name="latest.MyGroupBrowser"
+                    alias="GroupBrowser" roles-required="admin">
+                <view name="success">/templates/secure/admin/user/views/groupbrowser.vm</view>
+                <view name="error">/templates/secure/admin/user/views/groupbrowser.vm</view>
+            </action>
+
+            <action name="latest.MyEditUser" alias="EditUser" roles-required="admin">
+                <view name="error">/templates/secure/admin/user/views/editprofile.vm</view>
+                <view name="input">/templates/secure/admin/user/views/editprofile.vm</view>
+            </action>
+
+            <!--<action name="latest.MyEditProfile" alias="EditProfile">
+                <view name="error">/templates/secure/admin/user/views/editprofile.vm</view>
+                <view name="input">/templates/secure/admin/user/views/editprofile.vm</view>
+            </action>-->
+        </actions>
+    </webwork1>
+</atlassian-plugin>

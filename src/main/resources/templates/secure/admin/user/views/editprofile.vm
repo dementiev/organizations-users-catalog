@@ -1,0 +1,90 @@
+#parse('templates/error/action-error.vm')
+<form onsubmit="if (this.submitted) return false; this.submitted = true; return true" name="jiraform" method="post"
+      action="${baseurl}/secure/admin/user/EditUser.jspa">
+    <input type="hidden" value="$atl_token" name="atl_token" id="atl_token">
+    <table class="jiraform maxWidth">
+        <tbody>
+        <tr class="titlerow">
+            <td class="jiraformheader" colspan="2">
+                <h3 class="formtitle">$i18n.getText("editprofile.title"): $editedUser.fullName</h3></td>
+        </tr>
+        <tr class="descriptionrow">
+            <td class="jiraformheader" colspan="2">
+                <div class="desc-wrap">$i18n.getText("user.error.fillcorectly")</div>
+                <div class="notify info">$i18n.getText("user.error.fillcorectly")</div>
+            </td>
+        </tr>
+        <tr>
+            <td class="fieldLabelArea">
+                $i18n.getText("userform.fullname"):
+            </td>
+            <td bgcolor="#ffffff" class="fieldValueArea">
+                <input type="text" value="$editedUser.fullName" size="40" name="fullName">
+            </td>
+        </tr>
+        <tr>
+            <td class="fieldLabelArea">
+                $i18n.getText("userform.email"):
+            </td>
+            <td bgcolor="#ffffff" class="fieldValueArea">
+                <input type="text" value="$editedUser.email" size="40" name="email">
+            </td>
+        </tr>
+        <tr class="hidden">
+            <td>
+                <input type="hidden" value="$editedUser.fullName" name="editName" id="editName">
+            </td>
+        </tr>
+        <tr>
+            <td class="fieldLabelArea">
+<input type="checkbox" id="checkbox_company" value="true" name="checkbox_company"
+                #if("$currentCompany"!="") checked="true" #end>
+                <label for="checkbox_company">$i18n.getText("userform.addcompany"):</label>
+            </td>
+            <td bgcolor="#ffffff" class="fieldValueArea">
+                #if("$currentCompany"!="")
+                    <select name="companyName" id="companyName">
+                        #foreach ($company in ${companies})
+                            #if($company.name == $currentCompany)
+                                <option value="$company.name" selected="true">$company.name</option>
+                            #else
+                                <option value="$company.name">$company.name</option>
+                            #end
+                        #end
+                    </select>
+                #else
+                    <select name="companyName" id="companyName" disabled="disabled">
+                        #foreach ($company in ${companies})
+                            <option value="$company.name">$company.name</option>
+                        #end
+                    </select>
+                #end
+            </td>
+        </tr>
+        <tr>
+            <td class="jiraformfooter">&nbsp;</td>
+            <td colspan="1">
+                <input type="submit" class="spaced " title="Press Alt+Shift+s to submit form" accesskey="s"
+                       id="update_submit" value="$i18n.getText("userform.update")" name="Update">
+                <input type="button" onclick="location.href='${baseurl}/secure/admin/user/UserBrowser.jspa'"
+                       value="$i18n.getText('userform.cancel')"
+                       name="${baseurl}/secure/admin/user/ViewUser.jspa?atl_token=$atl_token&name=$editedUser.fullName"
+                       title="Cancel (Alt+Shift + `)" accesskey="`" id="cancelButton">
+            </td>
+        </tr>
+        <tr class="hidden">
+            <td>
+                <input type="hidden" value="UserBrowser.jspa" name="returnUrl" id="returnUrl">
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</form>
+<script type="text/javascript">
+    jQuery(function ($) {
+        document.title = "$i18n.getText('editprofile.title') - " + " ATG-JIRA";
+        $('#checkbox_company').click(function() {
+            $('#companyName').attr('disabled', ! this.checked)
+        });
+    });
+</script>

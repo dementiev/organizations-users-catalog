@@ -1,0 +1,7 @@
+#if ($action.hasAnyErrors())
+    #foreach ($error in ${errorMessages})
+        <tr>
+            <td width="100%" class="errMsg" style="background-color:#FFE7E7 !important;" colspan="2">$error</td>
+        </tr>
+    #end
+#end
